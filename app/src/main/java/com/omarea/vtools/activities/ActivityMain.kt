@@ -23,7 +23,7 @@ import com.omarea.common.shell.RootFile
 import com.omarea.common.ui.DialogHelper
 import com.omarea.permissions.CheckRootStatus
 import com.omarea.store.SpfConfig
-import com.omarea.ui.TabIconHelper2
+import com.omarea.ui.BottomNavPagerBinder
 import com.omarea.utils.ElectricityUnit
 import com.omarea.utils.Update
 import com.omarea.vtools.R
@@ -137,16 +137,21 @@ class ActivityMain : ActivityBase() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        val tabIconHelper2 = TabIconHelper2(tab_list, tab_content, this, supportFragmentManager, R.layout.list_item_tab2)
-        tabIconHelper2.newTabSpec(getString(R.string.app_nav), getDrawable(R.drawable.app_more)!!, FragmentNav.createPage(themeMode))
-        tabIconHelper2.newTabSpec(getString(R.string.app_home), getDrawable(R.drawable.app_home)!!, (if (CheckRootStatus.lastCheckResult) {
+        // 底部导航 + ViewPager（原为顶部 TabLayout，由 TabIconHelper2 装配）
+        val navBinder = BottomNavPagerBinder(
+                tab_list,
+                tab_content,
+                supportFragmentManager,
+                listOf(R.id.nav_action, R.id.nav_home, R.id.nav_donate)
+        )
+        navBinder.addPage(FragmentNav.createPage(themeMode))
+        navBinder.addPage(if (CheckRootStatus.lastCheckResult) {
             FragmentHome()
         } else {
             FragmentNotRoot()
-        }))
-        tabIconHelper2.newTabSpec(getString(R.string.app_donate), getDrawable(R.drawable.app_donate)!!, FragmentDonate())
-        tab_content.adapter = tabIconHelper2.adapter
-        tab_list.getTabAt(1)?.select() // 默认选中第二页
+        })
+        navBinder.addPage(FragmentDonate())
+        navBinder.select(1) // 默认选中第二页（概览）
 
         if (CheckRootStatus.lastCheckResult) {
             try {

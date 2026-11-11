@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 底部导航：功能 / 概览 / 打赏，对应原有顶部 Tab 的三个页面 -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_action"
+        android:icon="@drawable/app_more"
+        android:title="@string/app_nav" />
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/app_home"
+        android:title="@string/app_home" />
+
+    <item
+        android:id="@+id/nav_donate"
+        android:icon="@drawable/app_donate"
+        android:title="@string/app_donate" />
+
+</menu>

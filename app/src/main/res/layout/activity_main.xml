@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="false"
     android:keepScreenOn="false">
 
+    <!-- 内容区：顶部避开 Toolbar，底部避开底部导航 -->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/tab_content"
-        android:layout_above="@id/tab_list"
-        android:layout_marginTop="?actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_above="@id/tab_list"
+        android:layout_marginTop="?actionBarSize" />
 
-    <com.google.android.material.tabs.TabLayout
+    <!-- 底部导航（原顶部 TabLayout） -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/tab_list"
-        style="@style/SceneTabLayout" />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?cardBg"
+        app:elevation="8dp"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav" />
 
     <include
         layout="@layout/layout_app_bar"

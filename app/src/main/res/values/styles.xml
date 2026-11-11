@@ -14,7 +14,9 @@
 
     <style name="NotificationTitle" parent="android:TextAppearance.Material.Notification.Title" />
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light">
+    <!-- 使用 Material Bridge 主题：继承 AppCompat 行为不变，但补齐 Material 组件所需属性
+         （BottomNavigationView / MaterialCardView 等必需有 colorSurface 等属性才能 inflate） -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.Bridge">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
@@ -35,7 +37,7 @@
         <item name="android:radioButtonStyle">@style/SceneRadioBox</item>
     </style>
 
-    <style name="AppThemeNight" parent="Theme.AppCompat">
+    <style name="AppThemeNight" parent="Theme.MaterialComponents.Bridge">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
