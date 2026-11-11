@@ -14,14 +14,19 @@
         android:layout_above="@id/tab_list"
         android:layout_marginTop="?actionBarSize" />
 
-    <!-- 底部导航（原顶部 TabLayout） -->
+    <!-- 底部导航（原顶部 TabLayout）
+         背景与选中色都用 M3 语义色：Android 12+ 跟随壁纸动态取色，
+         低版本回退到 AppTheme 里定义的静态色板 -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/tab_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="?cardBg"
-        app:elevation="8dp"
+        android:background="?attr/colorSurface"
+        app:elevation="3dp"
+        app:itemActiveIndicatorStyle="@style/SceneNavIndicator"
+        app:itemIconTint="@color/scene_nav_item"
+        app:itemTextColor="@color/scene_nav_item"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav" />
 

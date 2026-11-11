@@ -1,0 +1,67 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ============================================================
+         新 GUI 设计规范（里程碑1 首页仪表盘）
+         只新增样式，不改动既有样式，避免影响其余 111 个布局。
+         ============================================================ -->
+
+    <!-- 卡片：圆角 12dp + 极轻阴影，底色用 M3 的 colorSurface。
+         - Android 12+：colorSurface 由壁纸动态取色决定
+         - Android 11-：由 AppTheme 里写死的 colorSurface 决定（各主题色一套）
+         这是 Material You 的标准做法：组件只引用语义色，不引用具体色值。 -->
+    <style name="SceneCard" parent="Widget.Material3.CardView.Filled">
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="cardPreventCornerOverlap">true</item>
+        <item name="strokeWidth">0dp</item>
+    </style>
+
+    <!-- 可点击卡片：保留 ripple -->
+    <style name="SceneCard.Clickable">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="rippleColor">?attr/colorPrimary</item>
+    </style>
+
+    <!-- 底部导航选中指示器（M3 的药丸形背景） -->
+    <style name="SceneNavIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">?attr/colorSecondaryContainer</item>
+    </style>
+
+    <!-- 仪表盘统计数字：大号、加粗、贴近 M3 的 display 层级 -->
+    <style name="SceneStatValue">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 仪表盘指标名：小号、次要色、字间距略放宽 -->
+    <style name="SceneStatLabel">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 卡片标题 -->
+    <style name="SceneCardTitle">
+        <item name="android:textColor">?attr/colorOnSurface</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:alpha">0.9</item>
+    </style>
+
+    <!-- 分区小标题（如“设备性能”“充电耗电”） -->
+    <style name="SceneSectionTitle">
+        <item name="android:textColor">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:letterSpacing">0.04</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+    </style>
+
+</resources>

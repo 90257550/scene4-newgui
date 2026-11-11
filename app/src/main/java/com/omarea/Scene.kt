@@ -8,6 +8,7 @@ import android.content.res.Configuration
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import com.google.android.material.color.DynamicColors
 import com.omarea.common.shared.FileWrite
 import com.omarea.common.shell.ShellExecutor
 import com.omarea.data.EventBus
@@ -110,6 +111,12 @@ class Scene : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        // 接入 Material You 动态取色：
+        // - Android 12+（API 31+）：M3 色板由壁纸派生，AppTheme 里的静态颜色被覆盖
+        // - Android 11 及以下：本调用为空操作，各主题继续使用 AppTheme 中写死的 M3 语义色
+        // applyToActivitiesIfAvailable 会自动给所有 Activity 套上动态色 overlay，无需逐个改主题。
+        DynamicColors.applyToActivitiesIfAvailable(this)
     }
 
     override fun attachBaseContext(base: Context?) {

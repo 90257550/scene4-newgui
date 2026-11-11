@@ -11,4 +11,16 @@
         <attr name="text" format="string" />
         <attr name="drawable" format="reference|integer" />
     </declare-styleable>
+
+    <!-- ===== 新 GUI 取色体系 =====
+         目的：让页面底、卡片、底部导航出自同一色相，形成 Material 3 的
+         「色调分层」关系，而不是当前的「灰底 + 纯白卡片 + 饱和蓝顶栏」三段割裂。
+         每套主题（蓝/青/绿/橙/红/粉/美/紫）各自覆盖这几个属性。 -->
+
+    <!-- 页面背景：主题色的极低饱和度变体，比卡片略深 -->
+    <attr name="sceneBackground" format="color" />
+    <!-- 卡片/导航表面色：比 sceneBackground 更亮，形成抬升感 -->
+    <attr name="sceneSurface" format="color" />
+    <!-- 分隔线/描边：低对比度，用于卡片边界 -->
+    <attr name="sceneOutline" format="color" />
 </resources>

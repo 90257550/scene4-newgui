@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 新首页四档调度按钮背景：M3 tonal container 风格（圆角 10dp，无透明度） -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/scene_power_powersave_on" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/scene_power_powersave_container" />
+            <corners android:radius="10dp" />
+        </shape>
+    </item>
+</selector>

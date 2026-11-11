@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 新首页四档调度按钮：M3 风格实色底 + 高对比度文字
+     原 powercfg_*_bg 是 #C0 alpha（75% 不透明）设计，配 #ffffffff 白字，
+     在深色背景上尚可，但接入 M3 亮色主题后白字压在浅色半透明底上不可读。
+     这里改用各档位实色的浅色调（tint 到 12% 的不透明混合），文字用对应的深色，
+     保证在亮色/深色主题下都有足够对比度。 -->
+<resources>
+    <!-- 省电：蓝 -->
+    <color name="scene_power_powersave_container">#E3F2FA</color>
+    <color name="scene_power_powersave_on">#005B82</color>
+    <!-- 均衡：青绿 -->
+    <color name="scene_power_balance_container">#E0F5F1</color>
+    <color name="scene_power_balance_on">#00614A</color>
+    <!-- 性能：绿 -->
+    <color name="scene_power_performance_container">#EDF7DC</color>
+    <color name="scene_power_performance_on">#3A5A00</color>
+    <!-- 极速：橙 -->
+    <color name="scene_power_fast_container">#FFF0E0</color>
+    <color name="scene_power_fast_on">#8A4200</color>
+</resources>

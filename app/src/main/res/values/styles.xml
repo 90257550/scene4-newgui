@@ -14,9 +14,12 @@
 
     <style name="NotificationTitle" parent="android:TextAppearance.Material.Notification.Title" />
 
-    <!-- 使用 Material Bridge 主题：继承 AppCompat 行为不变，但补齐 Material 组件所需属性
-         （BottomNavigationView / MaterialCardView 等必需有 colorSurface 等属性才能 inflate） -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.Bridge">
+    <!-- Material 3 主题，接入动态取色（Material You）：
+         - Android 12+（API 31+）：Theme.Material3.DynamicColors.DayNight 会把
+           colorPrimary / colorSurface 等 M3 色板替换为壁纸派生的动态色板
+         - Android 11 及以下：自动回退到下列静态 M3 色板，即下方 item 里写死的颜色，
+           因此 9 套主题色（AppThemeBlue/Cyan/...）在低版本仍按原逻辑生效 -->
+    <style name="AppTheme" parent="Theme.Material3.DynamicColors.DayNight">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
@@ -35,9 +38,22 @@
         <item name="android:seekBarStyle">@style/SceneSeekBar</item>
         <item name="android:checkboxStyle">@style/SceneCheckBox</item>
         <item name="android:radioButtonStyle">@style/SceneRadioBox</item>
+
+        <!-- ===== M3 语义色（Android 11 及以下的回退值）=====
+             Android 12+ 会被动态取色覆盖，这里的值不生效。
+             低版本则用这套中性色板，保证旧设备观感一致且不发灰。 -->
+        <item name="colorSurface">@color/cardBgLight</item>
+        <item name="colorSurfaceVariant">#F2F3F5</item>
+        <item name="colorOnSurface">#1A1C1E</item>
+        <item name="colorOnSurfaceVariant">#5C6066</item>
+        <item name="colorOutline">#C9CCD1</item>
+        <item name="android:colorBackground">@color/window_background_light</item>
+        <item name="colorOnBackground">#1A1C1E</item>
+        <item name="colorPrimaryContainer">?attr/colorPrimary</item>
+        <item name="colorOnPrimaryContainer">#00131F</item>
     </style>
 
-    <style name="AppThemeNight" parent="Theme.MaterialComponents.Bridge">
+    <style name="AppThemeNight" parent="Theme.Material3.DynamicColors.DayNight">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
@@ -57,6 +73,15 @@
         <item name="android:checkboxStyle">@style/SceneCheckBox</item>
         <item name="android:radioButtonStyle">@style/SceneRadioBox</item>
         <item name="android:windowAnimationStyle">@style/activityAnim</item>
+
+        <!-- ===== M3 语义色（深色回退值）===== -->
+        <item name="colorSurface">@color/cardBgDark</item>
+        <item name="colorSurfaceVariant">#24262A</item>
+        <item name="colorOnSurface">#E3E2E6</item>
+        <item name="colorOnSurfaceVariant">#A8ABB0</item>
+        <item name="colorOutline">#44474C</item>
+        <item name="android:colorBackground">@color/window_background_dark</item>
+        <item name="colorOnBackground">#E3E2E6</item>
     </style>
 
     <style name="AppThemeLight" parent="AppTheme">
