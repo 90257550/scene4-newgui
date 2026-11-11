@@ -32,13 +32,16 @@ class AutoClickInstall : AutoClickBase() {
     }
 
     fun packageinstallerAutoClick(service: AccessibilityService, event: AccessibilityEvent) {
+        // event.source 是带自定义 getter 的属性，每次访问都会重新取值，
+        // 因此必须先存入局部变量才能安全地复用非空判断（Kotlin 1.7 起强制）
+        val source = event.source
         if (!service.getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
-                        .getBoolean(SpfConfig.GLOBAL_SPF_AUTO_INSTALL, false) || event.source == null)
+                        .getBoolean(SpfConfig.GLOBAL_SPF_AUTO_INSTALL, false) || source == null)
             return
 
         try {
             for (ki in autoClickKeyWords.indices) {
-                val nextNodes = event.source.findAccessibilityNodeInfosByText(autoClickKeyWords[ki])
+                val nextNodes = source.findAccessibilityNodeInfosByText(autoClickKeyWords[ki])
                 if (nextNodes != null && !nextNodes.isEmpty()) {
                     var node: AccessibilityNodeInfo
                     for (i in nextNodes.indices) {
@@ -60,7 +63,7 @@ class AutoClickInstall : AutoClickBase() {
 
             for (ki in autoClickKeyWords.indices) {
 
-                val nodes = event.source.findAccessibilityNodeInfosByText(autoClickKeyWords2[ki])
+                val nodes = source.findAccessibilityNodeInfosByText(autoClickKeyWords2[ki])
                 if (nodes != null && !nodes.isEmpty()) {
                     var node: AccessibilityNodeInfo
                     for (i in nodes.indices) {
@@ -82,12 +85,13 @@ class AutoClickInstall : AutoClickBase() {
     }
 
     fun miuiUsbInstallAutoClick(service: AccessibilityService, event: AccessibilityEvent) {
+        val source = event.source
         if (!service.getSharedPreferences(SpfConfig.GLOBAL_SPF, Context.MODE_PRIVATE)
-                        .getBoolean(SpfConfig.GLOBAL_SPF_AUTO_INSTALL, false) || event.source == null)
+                        .getBoolean(SpfConfig.GLOBAL_SPF_AUTO_INSTALL, false) || source == null)
             return
 
         try {
-            val next2Nodes = event.source.findAccessibilityNodeInfosByText("继续安装")
+            val next2Nodes = source.findAccessibilityNodeInfosByText("继续安装")
             if (next2Nodes != null && !next2Nodes.isEmpty()) {
                 var node: AccessibilityNodeInfo
                 for (i in next2Nodes.indices) {

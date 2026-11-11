@@ -611,12 +611,10 @@ class PageConfigReader {
                     }
                     "align" -> {
                         when (attrValue) {
-                            "left" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                                textRow.align = Layout.Alignment.ALIGN_LEFT
-                            }
-                            "right" -> if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                                textRow.align = Layout.Alignment.ALIGN_RIGHT
-                            }
+                            // Layout.Alignment 只有 ALIGN_NORMAL/ALIGN_OPPOSITE/ALIGN_CENTER
+                            // left/right 分别对应 NORMAL/OPPOSITE（依赖文字方向）
+                            "left" -> textRow.align = Layout.Alignment.ALIGN_NORMAL
+                            "right" -> textRow.align = Layout.Alignment.ALIGN_OPPOSITE
                             "center" -> textRow.align = Layout.Alignment.ALIGN_CENTER
                             "normal" -> textRow.align = Layout.Alignment.ALIGN_NORMAL
                         }

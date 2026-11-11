@@ -6,6 +6,8 @@ android {
     dataBinding {
         enabled =true
     }
+    // 沙箱/CI 环境可通过 -PskipNative=true 跳过 NDK 编译（仅验证 Java/Kotlin 层）
+    def skipNative = project.hasProperty('skipNative') && project.property('skipNative') == 'true'
     signingConfigs {
         omarea_Signing {
             keyAlias 'omarea.com'
@@ -15,6 +17,7 @@ android {
         }
     }
     compileSdkVersion 33
+    buildToolsVersion '33.0.2'
     defaultConfig {
         resConfigs "zh"
         applicationId "com.omarea.vtools"
@@ -36,14 +39,12 @@ android {
     buildTypes {
         release {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            zipAlignEnabled true
             debuggable false
             jniDebuggable = false
             signingConfig signingConfigs.omarea_Signing
         }
         release_mini {
             shrinkResources true
-            zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             minifyEnabled true
             debuggable false
@@ -66,13 +67,15 @@ android {
         }
     }
     */
-    externalNativeBuild {
-        cmake {
-            path "src/main/cpp/CMakeLists.txt"
-            version "3.18.1"
+    if (!skipNative) {
+        externalNativeBuild {
+            cmake {
+                path "src/main/cpp/CMakeLists.txt"
+                version "3.22.1"
+            }
         }
+        ndkVersion '23.1.7779620'
     }
-    ndkVersion '23.1.7779620'
 
     // tests rely on JUnit-based classes
     useLibrary 'android.test.runner'
