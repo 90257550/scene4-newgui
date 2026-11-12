@@ -589,7 +589,7 @@
             android:background="@drawable/scene_btn_powersave"
             app:backgroundTint="@null"
             android:text="@string/powersave_short"
-            android:textColor="@color/scene_pw_powersave_off_text"
+            android:textColor="@color/scene_pw_text_powersave"
             android:textStyle="bold" />
 
         <Button
@@ -601,7 +601,7 @@
             android:background="@drawable/scene_btn_balance"
             app:backgroundTint="@null"
             android:text="@string/balance_short"
-            android:textColor="@color/scene_pw_balance_off_text"
+            android:textColor="@color/scene_pw_text_balance"
             android:textStyle="bold" />
 
         <Button
@@ -613,7 +613,7 @@
             android:background="@drawable/scene_btn_performance"
             app:backgroundTint="@null"
             android:text="@string/performance_short"
-            android:textColor="@color/scene_pw_performance_off_text"
+            android:textColor="@color/scene_pw_text_performance"
             android:textStyle="bold" />
 
         <Button
@@ -625,7 +625,7 @@
             android:background="@drawable/scene_btn_fast"
             app:backgroundTint="@null"
             android:text="@string/fast_short"
-            android:textColor="@color/scene_pw_fast_off_text"
+            android:textColor="@color/scene_pw_text_fast"
             android:textStyle="bold" />
     </LinearLayout>
 

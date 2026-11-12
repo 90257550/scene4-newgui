@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ============================================================
+     四档调度按钮 —— 深色模式变体（values-night）
+     浅色版是「极浅底 + 深色文字」，直接拿到深色主题下会变成刺眼的白块。
+     深色版改为「深底 + 亮色文字 + 低明度描边」，保持同样的状态语义：
+       选中  = 该档位实色填充 + 白字
+       未选中 = 深色底 + 同色系描边 + 亮色文字
+     ============================================================ -->
+<resources>
+    <color name="scene_pw_on_text">#FFFFFF</color>
+
+    <!-- 省电（蓝） -->
+    <color name="scene_pw_powersave_on_container">#0091D5</color>
+    <color name="scene_pw_powersave_off_container">#14252E</color>
+    <color name="scene_pw_powersave_off_stroke">#2A4C5E</color>
+    <color name="scene_pw_powersave_off_text">#6FC4F0</color>
+
+    <!-- 均衡（青绿） -->
+    <color name="scene_pw_balance_on_container">#00B78A</color>
+    <color name="scene_pw_balance_off_container">#102623</color>
+    <color name="scene_pw_balance_off_stroke">#245049</color>
+    <color name="scene_pw_balance_off_text">#5FDCBC</color>
+
+    <!-- 性能（绿） -->
+    <color name="scene_pw_performance_on_container">#5FAF00</color>
+    <color name="scene_pw_performance_off_container">#1C2410</color>
+    <color name="scene_pw_performance_off_stroke">#3B4E1E</color>
+    <color name="scene_pw_performance_off_text">#A8D967</color>
+
+    <!-- 极速（橙） -->
+    <color name="scene_pw_fast_on_container">#E06E00</color>
+    <color name="scene_pw_fast_off_container">#2A1C10</color>
+    <color name="scene_pw_fast_off_stroke">#57331A</color>
+    <color name="scene_pw_fast_off_text">#FFB060</color>
+</resources>

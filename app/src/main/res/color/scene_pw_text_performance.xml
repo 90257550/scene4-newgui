@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 四档按钮文字色：selected 时用白字，否则用该档位的深/亮色文字（随日夜主题自动切换） -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/scene_pw_on_text" android:state_selected="true" />
+    <item android:color="@color/scene_pw_performance_off_text" />
+</selector>

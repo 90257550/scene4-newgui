@@ -366,16 +366,10 @@ class FragmentHome : androidx.fragment.app.Fragment() {
 
     private fun setModeState() {
         // 用 selected 状态而非 alpha 表达选中：
-        // alpha 变淡在浅色主题下会让未选中按钮与背景融合、看起来消失，
-        // 改为「选中=实色填充 / 未选中=浅底+描边」，文字色也随状态切换。
+        // alpha 变淡在浅色主题下会让未选中按钮与背景融合、看起来消失。
+        // 背景（选中=实色填充 / 未选中=浅底+描边）和文字色都由
+        // state_selected 的 drawable / ColorStateList 自动处理，日夜主题各自有变体。
         val buttons = listOf(btn_powersave, btn_defaultmode, btn_gamemode, btn_fastmode)
-        val texts = listOf(
-            R.color.scene_pw_powersave_off_text,
-            R.color.scene_pw_balance_off_text,
-            R.color.scene_pw_performance_off_text,
-            R.color.scene_pw_fast_off_text
-        )
-        val onText = R.color.scene_pw_on_text
 
         val currentIndex = when (ModeSwitcher.getCurrentPowerMode()) {
             ModeSwitcher.POWERSAVE -> 0
@@ -386,15 +380,8 @@ class FragmentHome : androidx.fragment.app.Fragment() {
         }
 
         buttons.forEachIndexed { index, button ->
-            val selected = index == currentIndex
-            button.isSelected = selected
             button.alpha = 1f
-            button.setTextColor(
-                ContextCompat.getColor(
-                    requireContext(),
-                    if (selected) onText else texts[index]
-                )
-            )
+            button.isSelected = index == currentIndex
         }
     }
 
