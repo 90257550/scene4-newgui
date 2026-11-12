@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import com.omarea.Scene
 import com.omarea.common.shell.KeepShellPublic
 import com.omarea.common.ui.DialogHelper
@@ -364,23 +365,36 @@ class FragmentHome : androidx.fragment.app.Fragment() {
     }
 
     private fun setModeState() {
-        btn_powersave.alpha = 0.4f
-        btn_defaultmode.alpha = 0.4f
-        btn_gamemode.alpha = 0.4f
-        btn_fastmode.alpha = 0.4f
-        when (ModeSwitcher.getCurrentPowerMode()) {
-            ModeSwitcher.BALANCE -> {
-                btn_defaultmode.alpha = 1f
-            }
-            ModeSwitcher.PERFORMANCE -> {
-                btn_gamemode.alpha = 1f
-            }
-            ModeSwitcher.POWERSAVE -> {
-                btn_powersave.alpha = 1f
-            }
-            ModeSwitcher.FAST -> {
-                btn_fastmode.alpha = 1f
-            }
+        // 用 selected 状态而非 alpha 表达选中：
+        // alpha 变淡在浅色主题下会让未选中按钮与背景融合、看起来消失，
+        // 改为「选中=实色填充 / 未选中=浅底+描边」，文字色也随状态切换。
+        val buttons = listOf(btn_powersave, btn_defaultmode, btn_gamemode, btn_fastmode)
+        val texts = listOf(
+            R.color.scene_pw_powersave_off_text,
+            R.color.scene_pw_balance_off_text,
+            R.color.scene_pw_performance_off_text,
+            R.color.scene_pw_fast_off_text
+        )
+        val onText = R.color.scene_pw_on_text
+
+        val currentIndex = when (ModeSwitcher.getCurrentPowerMode()) {
+            ModeSwitcher.POWERSAVE -> 0
+            ModeSwitcher.BALANCE -> 1
+            ModeSwitcher.PERFORMANCE -> 2
+            ModeSwitcher.FAST -> 3
+            else -> -1
+        }
+
+        buttons.forEachIndexed { index, button ->
+            val selected = index == currentIndex
+            button.isSelected = selected
+            button.alpha = 1f
+            button.setTextColor(
+                ContextCompat.getColor(
+                    requireContext(),
+                    if (selected) onText else texts[index]
+                )
+            )
         }
     }
 

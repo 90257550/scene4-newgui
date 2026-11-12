@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 新首页四档调度按钮背景：M3 tonal container 风格 -->
+<!-- 调度按钮状态：selected = 实色填充；未选中 = 浅底 + 描边（不用 alpha，浅色主题下才看得见） -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true">
+    <item android:state_selected="true">
         <shape android:shape="rectangle">
-            <solid android:color="@color/scene_power_fast_on" />
+            <solid android:color="@color/scene_pw_fast_on_container" />
             <corners android:radius="10dp" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/scene_power_fast_container" />
+            <solid android:color="@color/scene_pw_fast_off_container" />
+            <stroke android:width="1dp" android:color="@color/scene_pw_fast_off_stroke" />
             <corners android:radius="10dp" />
         </shape>
     </item>

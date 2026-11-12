@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ============================================================
+     四档调度按钮的选中/未选中视觉
+     原实现用 alpha 0.4f 表示「未选中」，在浅色主题下几乎与页面底色融合，
+     导致三个未选中的按钮看起来消失。改用 M3 的填充/描边区分：
+       选中  = 该档位实色填充 + 白字
+       未选中 = 极浅底色 + 同色系描边 + 深色字
+     按下态与选中态一致（避免两套样式打架）。
+     ============================================================ -->
+<resources>
+    <!-- 选中态文字：实色填充上用白字 -->
+    <color name="scene_pw_on_text">#FFFFFF</color>
+
+    <!-- 省电（蓝） -->
+    <color name="scene_pw_powersave_on_container">#0091D5</color>
+    <color name="scene_pw_powersave_off_container">#F2F9FD</color>
+    <color name="scene_pw_powersave_off_stroke">#B8DDF0</color>
+    <color name="scene_pw_powersave_off_text">#00658F</color>
+
+    <!-- 均衡（青绿） -->
+    <color name="scene_pw_balance_on_container">#00B78A</color>
+    <color name="scene_pw_balance_off_container">#F1FAF7</color>
+    <color name="scene_pw_balance_off_stroke">#AEE4D5</color>
+    <color name="scene_pw_balance_off_text">#00735A</color>
+
+    <!-- 性能（绿） -->
+    <color name="scene_pw_performance_on_container">#6ECB00</color>
+    <color name="scene_pw_performance_off_container">#F7FBEE</color>
+    <color name="scene_pw_performance_off_stroke">#CDE8A0</color>
+    <color name="scene_pw_performance_off_text">#4A7A00</color>
+
+    <!-- 极速（橙） -->
+    <color name="scene_pw_fast_on_container">#FF7E00</color>
+    <color name="scene_pw_fast_off_container">#FFF8F0</color>
+    <color name="scene_pw_fast_off_stroke">#FFD0A0</color>
+    <color name="scene_pw_fast_off_text">#9A4D00</color>
+</resources>
