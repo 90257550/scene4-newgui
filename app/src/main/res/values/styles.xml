@@ -14,12 +14,11 @@
 
     <style name="NotificationTitle" parent="android:TextAppearance.Material.Notification.Title" />
 
-    <!-- Material 3 主题，接入动态取色（Material You）：
-         - Android 12+（API 31+）：Theme.Material3.DynamicColors.DayNight 会把
-           colorPrimary / colorSurface 等 M3 色板替换为壁纸派生的动态色板
-         - Android 11 及以下：自动回退到下列静态 M3 色板，即下方 item 里写死的颜色，
-           因此 9 套主题色（AppThemeBlue/Cyan/...）在低版本仍按原逻辑生效 -->
-    <style name="AppTheme" parent="Theme.Material3.DynamicColors.DayNight">
+    <!-- Material 3 基础主题（不含动态取色）。
+         动态取色改为运行时按设置开关应用（见 ThemeSwitch.applyDynamicColorIfEnabled）：
+         - 开关开启且系统为 Android 12+：DynamicColors 覆盖下面这些 M3 色板，界面跟随壁纸
+         - 开关关闭或系统低于 12：使用下面写死的静态色板，由 8 套主题的 colorAccent 派生 -->
+    <style name="AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowTranslucentNavigation">false</item>
@@ -75,6 +74,11 @@
         <item name="android:windowAnimationStyle">@style/activityAnim</item>
 
         <!-- ===== M3 语义色（深色回退值）===== -->
+        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="colorPrimaryContainer">@color/cardBgDark</item>
+        <item name="colorOnPrimaryContainer">@color/colorAccent</item>
+        <item name="colorSecondaryContainer">#2A2C31</item>
+        <item name="colorOnSecondaryContainer">@color/colorAccent</item>
         <item name="colorSurface">@color/cardBgDark</item>
         <item name="colorSurfaceVariant">#24262A</item>
         <item name="colorOnSurface">#E3E2E6</item>
@@ -105,6 +109,24 @@
         <item name="colorPrimary">?android:colorAccent</item>
         <item name="colorPrimaryDark">?android:colorAccent</item>
         <item name="android:actionBarTheme">@style/AppTheme.AppBarOverlay.Dark</item>
+
+        <!-- ===== M3 色板：全部派生自 colorAccent =====
+             这样 8 套主题只需定义 colorAccent，M3 语义色自动跟随，
+             旧界面（读 AppCompat 属性）与新界面（读 M3 属性）用同一套色。
+             动态取色开启时，DynamicColors 的 overlay 会覆盖这些值，
+             从而让壁纸派生色同时传导到新旧两套界面。 -->
+        <item name="colorSecondary">?android:colorAccent</item>
+        <item name="colorPrimaryContainer">@color/cardBgLight</item>
+        <item name="colorOnPrimaryContainer">?android:colorAccent</item>
+        <item name="colorSecondaryContainer">@color/cardBgLight</item>
+        <item name="colorOnSecondaryContainer">?android:colorAccent</item>
+        <item name="colorSurface">@color/cardBgLight</item>
+        <item name="colorSurfaceVariant">@color/window_background_light</item>
+        <item name="colorOnSurface">#1A1C1E</item>
+        <item name="colorOnSurfaceVariant">#5C6066</item>
+        <item name="colorOutline">#C9CCD1</item>
+        <item name="android:colorBackground">@color/window_background_light</item>
+        <item name="colorOnBackground">#1A1C1E</item>
     </style>
 
     <style name="AppThemeBlue" parent="AppThemeColor">

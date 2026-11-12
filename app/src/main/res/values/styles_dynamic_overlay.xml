@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- ============================================================
+     Material You 动态取色的「桥接」Overlay
+
+     背景：本项目 90% 的视觉（顶栏、状态栏、导航栏、图表、强调色）
+     都引用 AppCompat 属性（colorAccent / colorPrimaryDark），
+     而 DynamicColors 只覆盖 M3 语义色，两者互不相通。
+
+     注意不能写成 colorAccent -> ?attr/colorPrimary 且 colorPrimary -> ?android:colorAccent，
+     那会形成循环引用导致解析失败。这里改为单向：
+       colorAccent 取 M3 的 colorPrimary 值（DynamicColors 已按壁纸算好）
+       并把 colorPrimaryDark / 状态栏等一并指过去
+     ============================================================ -->
+<resources>
+    <style name="ThemeOverlay.Scene.DynamicBridge" parent="">
+        <!-- 强调色直接采用动态色板里的 primary（已是壁纸派生色） -->
+        <item name="colorAccent">?attr/colorPrimary</item>
+        <!-- 顶栏 / 状态栏 -->
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <!-- 导航栏与页面底色用 surface，避免整屏都是饱和色 -->
+        <item name="android:navigationBarColor">?attr/colorSurface</item>
+        <item name="android:windowBackground">?attr/colorSurface</item>
+        <!-- 卡片底色同步，保证卡片与新界面一致 -->
+        <item name="cardBg">?attr/colorSurface</item>
+        <!-- 文字层级 -->
+        <item name="android:textColorPrimary">?attr/colorOnSurface</item>
+        <item name="android:textColorSecondary">?attr/colorOnSurfaceVariant</item>
+    </style>
+</resources>

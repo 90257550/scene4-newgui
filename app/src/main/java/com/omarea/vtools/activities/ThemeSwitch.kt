@@ -20,6 +20,8 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.PermissionChecker
+import android.util.Log
+import com.google.android.material.color.DynamicColors
 import com.omarea.common.ui.ThemeMode
 import com.omarea.store.SpfConfig
 import com.omarea.vtools.R
@@ -40,6 +42,31 @@ object ThemeSwitch {
     private var globalSPF: SharedPreferences? = null
 
     private fun checkPermission(context: Context, permission: String): Boolean = PermissionChecker.checkSelfPermission(context, permission) == PermissionChecker.PERMISSION_GRANTED
+
+    /**
+     * 在 setTheme 之后为当前 Activity 应用 Material You 动态取色。
+     *
+     * 为什么不能只在 Application 里调 applyToActivitiesIfAvailable：
+     * 本项目的每个 Activity 都会在 onCreate 里调用 setTheme(themeId) 切换 8 套主题，
+     * setTheme 会重置窗口主题并丢弃此前套上的动态色 overlay，导致动态取色形同虚设。
+     * 因此必须在 setTheme 之后重新应用。
+     *
+     * 用户在设置里关闭「跟随壁纸取色」时不应用，M3 语义色回落到 AppTheme 的静态色板。
+     */
+    private fun applyDynamicColorIfEnabled(activity: Activity) {
+        val enabled = globalSPF?.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_COLOR, true) ?: true
+        if (!enabled) return
+
+        // 1) 让 DynamicColors 把 M3 色板换成壁纸派生色（Android 12 以下内部自动跳过）
+        DynamicColors.applyToActivityIfAvailable(activity)
+
+        // 2) 本项目的顶栏/状态栏/图表读的是 AppCompat 属性，DynamicColors 不覆盖它们，
+        //    因此再叠一层桥接 overlay，把 AppCompat 属性重定向到 M3 语义色，
+        //    这样壁纸派生色才能传导到旧界面，做到新旧页面配色一致。
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity.theme.applyStyle(R.style.ThemeOverlay_Scene_DynamicBridge, true)
+        }
+    }
 
     internal fun switchTheme(activity: Activity): ThemeMode {
         val themeMode = ThemeMode()
@@ -96,6 +123,12 @@ object ThemeSwitch {
             }
             activity.setTheme(themeId)
 
+            // 动态取色必须紧跟在 setTheme 之后应用：
+            // setTheme 会重置窗口主题，把 Application 里 applyToActivitiesIfAvailable
+            // 预先套上的动态色 overlay 覆盖掉，导致 Material You 完全不生效。
+            // 这里对当前 Activity 重新应用一次，才能让壁纸取色真正覆盖 M3 色板。
+            applyDynamicColorIfEnabled(activity)
+
             if (themeMode.isLightStatusBar) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
@@ -104,46 +137,55 @@ object ThemeSwitch {
                 }
             }
         } else if (theme == 10) {
-            val wallpaper = WallpaperManager.getInstance(activity)
-            val wallpaperInfo = wallpaper.wallpaperInfo
-            activity.setTheme(R.style.AppThemeWallpaper)
+            // 壁纸主题：Android 13+ 读取壁纸 Drawable 需要 READ_MEDIA_IMAGES 权限，
+            // 而本项目 targetSdk 30 未声明该权限，wallpaper.drawable 会抛 SecurityException。
+            // 一旦抛出且主题值已存进 SPF，就会形成「每次启动必崩、用户无法自行恢复」的死循环，
+            // 因此这里整体兜底：任何异常都回退到默认蓝色主题并清除该设置。
+            try {
+                val wallpaper = WallpaperManager.getInstance(activity)
+                val wallpaperInfo = wallpaper.wallpaperInfo
+                activity.setTheme(R.style.AppThemeWallpaper)
+                applyDynamicColorIfEnabled(activity)
 
-            // 动态壁纸
-            if (wallpaperInfo != null && wallpaperInfo.packageName != null) {
-                // activity.window.setBackgroundDrawable(activity.getDrawable(R.drawable.window_transparent));
-                activity.window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
-
-                themeMode.isDarkMode = true
-            } else {
-                val wallpaperDrawable = wallpaper.drawable
-
-                // 深色的静态壁纸
-                if (isDarkColor(wallpaperDrawable)) {
+                // 动态壁纸
+                if (wallpaperInfo != null && wallpaperInfo.packageName != null) {
+                    activity.window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER)
                     themeMode.isDarkMode = true
                 } else {
-                    // 浅色的静态壁纸
-                    themeMode.isDarkMode = false
-                    themeMode.isLightStatusBar = true
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-                    }
+                    val wallpaperDrawable = wallpaper.drawable
+                    if (wallpaperDrawable is BitmapDrawable) {
+                        // 深色的静态壁纸
+                        if (isDarkColor(wallpaperDrawable)) {
+                            themeMode.isDarkMode = true
+                        } else {
+                            // 浅色的静态壁纸
+                            themeMode.isDarkMode = false
+                            themeMode.isLightStatusBar = true
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR or View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+                            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+                            }
 
-                    if (!(activity is ActivityMain)) {
-                        activity.window.navigationBarColor = Color.TRANSPARENT
+                            if (!(activity is ActivityMain)) {
+                                activity.window.navigationBarColor = Color.TRANSPARENT
+                            }
+                        }
+                        activity.window.setBackgroundDrawable(wallpaperDrawable)
                     }
                 }
 
-                activity.window.setBackgroundDrawable(wallpaperDrawable)
-                // 使用壁纸高斯模糊作为窗口背景
-                // activity.window.setBackgroundDrawable(BitmapDrawable(activity.resources, rsBlur((wallPaper as BitmapDrawable).bitmap, 25, activity)))
-            }
-
-            if (themeMode.isDarkMode) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                if (themeMode.isDarkMode) {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                }
+            } catch (ex: Throwable) {
+                // 壁纸不可读（权限/格式问题）时回退，避免启动崩溃死循环
+                Log.w("SceneDynamicColor", "壁纸主题不可用，回退默认主题: ${ex.javaClass.simpleName}")
+                globalSPF!!.edit().putInt(SpfConfig.GLOBAL_SPF_THEME, 0).apply()
+                activity.setTheme(themeMap[0])
+                applyDynamicColorIfEnabled(activity)
             }
         }
         return themeMode

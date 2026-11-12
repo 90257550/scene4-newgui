@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.Toast
 import android.widget.Switch
 import androidx.core.content.PermissionChecker
 import com.omarea.common.shell.KeepShellPublic
@@ -29,6 +30,21 @@ class ActivityOtherSettings : ActivityBase() {
 
         settings_disable_selinux.isChecked = spf.getBoolean(SpfConfig.GLOBAL_SPF_DISABLE_ENFORCE, false)
         settings_theme_wallpaper.isChecked = spf.getInt(SpfConfig.GLOBAL_SPF_THEME, 1) == 10
+        settings_theme_dynamic.isChecked = spf.getBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_COLOR, true)
+    }
+
+    /**
+     * 切换「跟随壁纸取色」（Material You）。
+     * 仅 Android 12+ 真正生效；关闭后回落到下方选定的主题色。
+     *
+     * 不调用 recreate()：本 Activity 在 Android 13 上重建会重新走权限检查，
+     * 触发 "Op READ_MEDIA_IMAGES ignore" 的 SecurityException（targetSdk 30 遗留问题）。
+     * 改为提示用户重启应用生效，避免直接把用户踢出。
+     */
+    fun onDynamicColorClick(view: View) {
+        val enabled = (view as Switch).isChecked
+        spf.edit().putBoolean(SpfConfig.GLOBAL_SPF_DYNAMIC_COLOR, enabled).apply()
+        Toast.makeText(this, "重启应用后生效", Toast.LENGTH_SHORT).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -71,6 +71,8 @@
     <string name="settings_disable_selinux">SeLinux宽容模式</string>
     <string name="settings_disable_selinux_desc">将SELinux切换到宽容模式(部分软件叫[关闭Selinux])，SeLinux状态对Scene没有任何影响，并且开启宽容模式可能会死机重启！</string>
     <string name="settings_theme">主题</string>
+    <string name="settings_theme_dynamic">跟随壁纸取色</string>
+    <string name="settings_theme_dynamic_desc">Material You：Android 12 及以上由壁纸自动生成界面配色。关闭后使用下方选择的主题色。</string>
     <string name="settings_theme_wallpaper">使用壁纸</string>
     <string name="settings_theme_wallpaper_desc">使用系统壁纸作为窗口背景，显示为半透明界面</string>
     <string name="settings_debug_layer">调试窗口</string>

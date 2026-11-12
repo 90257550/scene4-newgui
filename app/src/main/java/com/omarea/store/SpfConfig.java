@@ -55,6 +55,9 @@ public class SpfConfig {
     public static String GLOBAL_SPF_AUTO_EXIT = "auto_exit";
     public static String GLOBAL_SPF_NIGHT_MODE = "app_night_mode";
     public static String GLOBAL_SPF_THEME = "app_theme2";
+    // 是否跟随壁纸动态取色（Material You）。仅在 Android 12+ 有意义；
+    // 默认开启，关闭后使用上面 GLOBAL_SPF_THEME 选定的 8 套主题色。
+    public static String GLOBAL_SPF_DYNAMIC_COLOR = "dynamic_color";
     public static String GLOBAL_SPF_MAC = "wifi_mac";
     public static String GLOBAL_SPF_MAC_AUTOCHANGE_MODE = "wifi_mac_autochange_mode";
     public static int GLOBAL_SPF_MAC_AUTOCHANGE_MODE_1 = 1;
